@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels: { app: frontend }
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels: { app: frontend }
+  template:
+    metadata:
+      labels: { app: frontend }
+    spec:
+      containers:
+        - name: frontend
+          image: devon-demo:1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - { name: MODE, value: frontend }
+            - { name: API_URL, value: "http://api" }
+          ports: [{ containerPort: 8080, name: http }]
+          resources:
+            requests: { cpu: 25m, memory: 32Mi }
+            limits: { memory: 128Mi }
+          livenessProbe:
+            httpGet: { path: /healthz, port: http }
+          readinessProbe:
+            httpGet: { path: /healthz, port: http }

@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: demo-alerts
+spec:
+  groups:
+    - name: demo.rules
+      rules:
+        - alert: DemoHighErrorRate
+          expr: |
+            sum by (namespace, pod, svc) (rate(http_requests_total{code=~"5.."}[2m]))
+              / sum by (namespace, pod, svc) (rate(http_requests_total[2m])) > 0.2
+          for: 1m
+          labels: { severity: critical }
+          annotations:
+            summary: "{{ $labels.svc }} 5xx ratio is {{ $value | humanizePercentage }}"
+        - alert: DemoMemoryNearLimit
+          expr: |
+            max by (namespace, pod, container) (container_memory_working_set_bytes{namespace="demo", container!=""})
+              / max by (namespace, pod, container) (kube_pod_container_resource_limits{namespace="demo", resource="memory"}) > 0.9
+          for: 1m
+          labels: { severity: warning }
+          annotations:
+            summary: "{{ $labels.container }} uses {{ $value | humanizePercentage }} of its memory limit"

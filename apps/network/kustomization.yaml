@@ -1,0 +1,2 @@
+# NetworkPolicies for the demo namespace. Empty by default (all traffic allowed).
+resources: []
