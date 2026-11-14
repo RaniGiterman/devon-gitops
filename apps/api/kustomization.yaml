@@ -1,1 +1,5 @@
-resources: [configmap.yaml, deployment.yaml, service.yaml]
+resources: [deployment.yaml, service.yaml]
+# Generated name gets a content hash, so any config change rolls the deployment.
+configMapGenerator:
+  - name: api-config
+    envs: [config.env]
