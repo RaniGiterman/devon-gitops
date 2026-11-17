@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: devon-demo:1.0.10
+          image: devon-demo:1.0.0
           imagePullPolicy: IfNotPresent
           env:
             - { name: MODE, value: api }
@@ -23,8 +23,8 @@ spec:
             - configMapRef: { name: api-config }
           ports: [{ containerPort: 8080, name: http }]
           resources:
-            requests: { cpu: 50m, memory: 128Mi }
-            limits: { memory: 512Mi }
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { memory: 96Mi }
           livenessProbe:
             httpGet: { path: /healthz, port: http }
             periodSeconds: 10
