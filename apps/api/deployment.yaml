@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: devon-demo:1.1.0
+          image: devon-demo:1.0.10
           imagePullPolicy: IfNotPresent
           env:
             - { name: MODE, value: api }
